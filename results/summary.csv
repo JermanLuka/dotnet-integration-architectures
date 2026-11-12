@@ -1,4 +1,0 @@
-Architecture,Ext_FilesModified,Ext_NewFiles,Ext_LinesInNewFiles,Ext_LinesInExistingFiles,Ext_CoreChanged,Cx_Maintainability,Cx_CyclomaticComplexity,Cx_ClassCoupling,Cx_LinesOfCode,Perf_MeanMs,Perf_StdDevMs,Perf_MedianMs,FT_PermanentAvgPct,FT_TransientAvgPct
-Monolith,3,0,0,31,Yes,55,25,37,216,0.067,0.049,0.064,100.0,75.0
-Hexagonal,2,1,35,2,No,72,44,39,270,0.064,0.035,0.06,100.0,75.0
-Messaging,3,1,45,6,No,65,56,59,439,0.111,0.069,0.105,100.0,100.0

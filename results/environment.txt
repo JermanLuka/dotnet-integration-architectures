@@ -1,0 +1,8 @@
+Date: 2026-11-04
+CPU: 11th Gen Intel(R) Core(TM) i5-11600K @ 3.90GHz
+Memory: 32 GB
+OS: Microsoft Windows 11 Pro 10.0.26200
+.NET SDK: 10.0.403
+.NET runtime: 10.0.14
+Configuration: Release
+Command: powershell -File Measurements/run-measurements.ps1 -Runs 5

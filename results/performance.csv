@@ -1,4 +1,13 @@
-Architecture,MeanMs,StdDevMs,MedianMs,P95Ms,Iterations
-Monolith (Layered),0.067,0.049,0.064,0.078,500
-Hexagonal (Ports & Adapters),0.064,0.035,0.06,0.074,500
-Messaging (Channel-based),0.111,0.069,0.105,0.127,500
+Architecture,MeanMs,StdDevMs,MedianMs,P95Ms,Iterations,ResponseSize,RepoCount
+Monolith (Layered),0.07,0.08,0.061,0.081,2000,S,2
+Hexagonal (Ports & Adapters),0.083,0.064,0.077,0.097,2000,S,2
+Messaging (Channel-based),0.126,0.075,0.12,0.161,2000,S,2
+Monolith (Layered),0.109,0.062,0.101,0.123,2000,M,50
+Hexagonal (Ports & Adapters),0.115,0.06,0.109,0.127,2000,M,50
+Messaging (Channel-based),0.141,0.074,0.134,0.161,2000,M,50
+Monolith (Layered),0.295,0.059,0.278,0.339,2000,L,500
+Hexagonal (Ports & Adapters),0.259,0.058,0.25,0.29,2000,L,500
+Messaging (Channel-based),0.166,0.069,0.147,0.204,2000,L,500
+Monolith (Layered),0.744,0.141,0.693,1.048,2000,XL,5000
+Hexagonal (Ports & Adapters),0.708,0.116,0.657,0.964,2000,XL,5000
+Messaging (Channel-based),0.765,0.16,0.703,1.127,2000,XL,5000

@@ -7,7 +7,6 @@ namespace Measurements;
 
 public sealed class PerformanceRunner
 {
-    private readonly FakeHttpHandler _handler = new(TestData.AllResponses());
     private readonly IConfigurationRoot _config = TestData.Config();
 
     public record Result(
@@ -16,30 +15,44 @@ public sealed class PerformanceRunner
         double StdDevMs,
         double MedianMs,
         double P95Ms,
-        int Iterations);
+        int Iterations,
+        string ResponseSize,
+        int RepoCount);
 
-    public async Task<List<Result>> RunAllAsync(int iterations = 500)
+    /// <summary>
+    /// Measures every architecture at every response size from <see cref="TestData.ResponseSizes"/>.
+    /// Sizes are the outer loop, so each size gets its own handler and its own warm-up, and the
+    /// rows come out grouped by size with the smallest first.
+    /// </summary>
+    public async Task<List<Result>> RunAllAsync(int iterations = 2000)
     {
-        var pipelines = new (string Name, Func<Func<Task>> Prepare)[]
-        {
-            ("Monolith (Layered)", PrepareMonolith),
-            ("Hexagonal (Ports & Adapters)", PrepareHexagonal),
-            ("Messaging (Channel-based)", PrepareMessaging),
-        };
-
-        const int warmupIterations = 10;
-        for (int i = 0; i < warmupIterations; i++)
-            foreach (var (_, prepare) in pipelines)
-                await prepare()();
-
         var results = new List<Result>();
-        foreach (var (name, prepare) in pipelines)
-            results.Add(await MeasureAsync(name, prepare, iterations));
+
+        foreach (var size in TestData.ResponseSizes)
+        {
+            var handler = new FakeHttpHandler(TestData.AllResponses(size.RepoCount));
+
+            var pipelines = new (string Name, Func<Func<Task>> Prepare)[]
+            {
+                ("Monolith (Layered)", () => PrepareMonolith(handler)),
+                ("Hexagonal (Ports & Adapters)", () => PrepareHexagonal(handler)),
+                ("Messaging (Channel-based)", () => PrepareMessaging(handler)),
+            };
+
+            const int warmupIterations = 10;
+            for (int i = 0; i < warmupIterations; i++)
+                foreach (var (_, prepare) in pipelines)
+                    await prepare()();
+
+            foreach (var (name, prepare) in pipelines)
+                results.Add(await MeasureAsync(name, prepare, iterations, size));
+        }
 
         return results;
     }
 
-    private static async Task<Result> MeasureAsync(string name, Func<Func<Task>> prepare, int iterations)
+    private static async Task<Result> MeasureAsync(
+        string name, Func<Func<Task>> prepare, int iterations, TestData.ResponseSize size)
     {
         for (int i = 0; i < 10; i++)
             await prepare()();
@@ -68,7 +81,7 @@ public sealed class PerformanceRunner
         var p95 = Percentile(sorted, 95);
 
         return new Result(name, Math.Round(mean, 3), Math.Round(stddev, 3),
-            Math.Round(median, 3), Math.Round(p95, 3), iterations);
+            Math.Round(median, 3), Math.Round(p95, 3), iterations, size.Label, size.RepoCount);
     }
 
     private static double Percentile(double[] sorted, double percentile)
@@ -79,21 +92,21 @@ public sealed class PerformanceRunner
         return sorted[lower] + (sorted[upper] - sorted[lower]) * (rank - lower);
     }
 
-    private Func<Task> PrepareMonolith()
+    private Func<Task> PrepareMonolith(HttpMessageHandler handler)
     {
-        var (orchestrator, _) = ArchitectureFactory.BuildMonolith(_config, _handler);
+        var (orchestrator, _) = ArchitectureFactory.BuildMonolith(_config, handler);
         return () => orchestrator.RunAsync();
     }
 
-    private Func<Task> PrepareHexagonal()
+    private Func<Task> PrepareHexagonal(HttpMessageHandler handler)
     {
-        var (orchestrator, _) = ArchitectureFactory.BuildHexagonal(_config, _handler);
+        var (orchestrator, _) = ArchitectureFactory.BuildHexagonal(_config, handler);
         return () => orchestrator.RunAsync();
     }
 
-    private Func<Task> PrepareMessaging()
+    private Func<Task> PrepareMessaging(HttpMessageHandler handler)
     {
-        var (orchestrator, _) = ArchitectureFactory.BuildMessaging(_config, _handler);
+        var (orchestrator, _) = ArchitectureFactory.BuildMessaging(_config, handler);
         return () => orchestrator.RunAsync();
     }
 
@@ -102,12 +115,12 @@ public sealed class PerformanceRunner
         Directory.CreateDirectory(Path.GetDirectoryName(csvPath)!);
 
         using var writer = new StreamWriter(csvPath);
-        writer.WriteLine("Architecture,MeanMs,StdDevMs,MedianMs,P95Ms,Iterations");
+        writer.WriteLine("Architecture,MeanMs,StdDevMs,MedianMs,P95Ms,Iterations,ResponseSize,RepoCount");
         foreach (var r in results)
         {
             writer.WriteLine(string.Format(CultureInfo.InvariantCulture,
-                "{0},{1},{2},{3},{4},{5}",
-                r.Architecture, r.MeanMs, r.StdDevMs, r.MedianMs, r.P95Ms, r.Iterations));
+                "{0},{1},{2},{3},{4},{5},{6},{7}",
+                r.Architecture, r.MeanMs, r.StdDevMs, r.MedianMs, r.P95Ms, r.Iterations, r.ResponseSize, r.RepoCount));
         }
     }
 }

@@ -1,5 +1,5 @@
-﻿Architecture,FilesModified,NewFiles,LinesAddedInNewFiles,LinesChangedInExistingFiles,CoreLogicChanged
+﻿Architecture,FilesModified,NewFiles,LinesAddedInNewFiles,LinesAddedInExistingFiles,CoreLogicChanged
 Shared (common),1,1,61,1,N/A
-Monolith,3,0,0,31,Yes
+Monolith,3,0,0,22,Yes
 Hexagonal,2,1,35,2,No
 Messaging,3,1,45,6,No
