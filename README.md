@@ -1,7 +1,7 @@
 # Integration Patterns in .NET: Hexagonal vs. Layered Monolith vs. Message-Driven Architecture
 
 [![.NET 10](https://img.shields.io/badge/.NET-10-512BD4?logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/download/dotnet/10.0)
-[![tests](https://github.com/JermanLuka/integracijski-vzorci-diploma/actions/workflows/tests.yml/badge.svg)](https://github.com/JermanLuka/integracijski-vzorci-diploma/actions/workflows/tests.yml)
+[![tests](https://github.com/JermanLuka/dotnet-integration-architectures/actions/workflows/tests.yml/badge.svg)](https://github.com/JermanLuka/dotnet-integration-architectures/actions/workflows/tests.yml)
 
 One C# / .NET 10 integration service built three ways (a layered monolith, a hexagonal architecture with ports and adapters, and a message-driven pipeline on `System.Threading.Channels`) and measured for extensibility, code complexity, performance and fault tolerance, using integration patterns such as adapter, canonical data model, producer-consumer, retry and dead-letter queue.
 
