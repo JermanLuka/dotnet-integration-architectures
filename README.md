@@ -291,3 +291,7 @@ The monolith is additionally tested in a mode where exceptions propagate and the
 
 - Website: [lukajerman.dev](https://lukajerman.dev)
 - LinkedIn: [linkedin.com/in/luka-jerman-12046442b](https://www.linkedin.com/in/luka-jerman-12046442b)
+
+## License
+
+The code is released under the [MIT License](LICENSE).
