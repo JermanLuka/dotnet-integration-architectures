@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Text;
 using Microsoft.Extensions.Configuration;
 
 namespace Shared.Tests;
@@ -8,6 +9,8 @@ namespace Shared.Tests;
 /// and the test configuration used by every test and measurement project.
 /// URLs are stored in the order each source actually requests them, so the
 /// first entry is always the first request a source makes.
+/// The GitHub repository listing can be generated at a requested size, so the
+/// same pipelines can be measured against responses of different sizes.
 /// </summary>
 public static class TestData
 {
@@ -23,16 +26,63 @@ public static class TestData
         ["OpenMeteo"] = 3,
     };
 
+    /// <summary>
+    /// Number of repositories in the default GitHub repository listing. Keeping the
+    /// default at 2 means every existing test and measurement sees the response it
+    /// always saw.
+    /// </summary>
+    public const int DefaultRepoCount = 2;
+
+    /// <summary>One step of the response-size sweep: a label for reporting and the repository count it stands for.</summary>
+    public readonly record struct ResponseSize(string Label, int RepoCount);
+
+    /// <summary>
+    /// The response sizes the performance matrix is measured at. S reproduces the
+    /// original fixed response. L and XL are generated payloads for testing the effect
+    /// of size only: the live source requests a single page of at most 100 repositories.
+    /// </summary>
+    public static readonly ResponseSize[] ResponseSizes =
+    [
+        new("S", 2),
+        new("M", 50),
+        new("L", 500),
+        new("XL", 5000),
+    ];
+
+    private const string GitHubReposEndpoint = "/user/repos?per_page=100&type=owner";
+
     private static string WorldBankResponse(double value) =>
         "[{\"page\":1,\"pages\":1,\"total\":1},[{\"value\":" + value.ToString("G", CultureInfo.InvariantCulture) + "}]]";
+
+    /// <summary>
+    /// Builds a GitHub repository listing with <paramref name="repoCount"/> entries.
+    /// Star and fork counts follow a fixed arithmetic progression, so the response is
+    /// deterministic and the first two entries are byte-for-byte the original response.
+    /// Only the payload grows; GitHub still yields exactly five metrics, because
+    /// stars and forks are summed across the listing.
+    /// </summary>
+    public static string GitHubReposResponse(int repoCount)
+    {
+        ArgumentOutOfRangeException.ThrowIfNegative(repoCount);
+
+        var sb = new StringBuilder(repoCount * 48 + 2);
+        sb.Append('[');
+        for (int i = 0; i < repoCount; i++)
+        {
+            if (i > 0) sb.Append(',');
+            sb.Append("{\"stargazers_count\":").Append(3 + 4 * i)
+              .Append(",\"forks_count\":").Append(1 + i).Append('}');
+        }
+        sb.Append(']');
+        return sb.ToString();
+    }
 
     private static readonly Dictionary<string, (string Endpoint, string Response)[]> Endpoints = new()
     {
         ["GitHub"] =
         [
             ("/user", """{"public_repos":5,"followers":10,"public_gists":2}"""),
-            ("/user/repos?per_page=100&type=owner",
-                """[{"stargazers_count":3,"forks_count":1},{"stargazers_count":7,"forks_count":2}]"""),
+            (GitHubReposEndpoint, GitHubReposResponse(DefaultRepoCount)),
         ],
         ["StackOverflow"] =
         [
@@ -64,12 +114,21 @@ public static class TestData
 
     public static Dictionary<string, string> AllResponses() => ResponsesFor(SourceNames);
 
-    public static Dictionary<string, string> ResponsesFor(params string[] sources)
+    public static Dictionary<string, string> AllResponses(int repoCount) => ResponsesFor(SourceNames, repoCount);
+
+    public static Dictionary<string, string> ResponsesFor(params string[] sources) =>
+        ResponsesFor(sources, DefaultRepoCount);
+
+    public static Dictionary<string, string> ResponsesFor(string[] sources, int repoCount)
     {
         var responses = new Dictionary<string, string>();
         foreach (var source in sources)
             foreach (var (endpoint, response) in Endpoints[source])
                 responses[endpoint] = response;
+
+        if (repoCount != DefaultRepoCount && responses.ContainsKey(GitHubReposEndpoint))
+            responses[GitHubReposEndpoint] = GitHubReposResponse(repoCount);
+
         return responses;
     }
 

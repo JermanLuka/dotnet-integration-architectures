@@ -1,0 +1,61 @@
+Run,Architecture,MeanMs,StdDevMs,MedianMs,P95Ms,Iterations,ResponseSize,RepoCount
+1,Monolith (Layered),0.087,0.096,0.068,0.132,2000,S,2
+1,Hexagonal (Ports & Adapters),0.072,0.063,0.067,0.078,2000,S,2
+1,Messaging (Channel-based),0.112,0.076,0.107,0.126,2000,S,2
+1,Monolith (Layered),0.097,0.067,0.089,0.106,2000,M,50
+1,Hexagonal (Ports & Adapters),0.127,0.075,0.112,0.159,2000,M,50
+1,Messaging (Channel-based),0.151,0.082,0.142,0.168,2000,M,50
+1,Monolith (Layered),0.309,0.08,0.29,0.42,2000,L,500
+1,Hexagonal (Ports & Adapters),0.269,0.067,0.271,0.308,2000,L,500
+1,Messaging (Channel-based),0.183,0.073,0.168,0.23,2000,L,500
+1,Monolith (Layered),0.791,0.186,0.703,1.183,2000,XL,5000
+1,Hexagonal (Ports & Adapters),0.745,0.171,0.674,1.124,2000,XL,5000
+1,Messaging (Channel-based),0.765,0.169,0.701,1.148,2000,XL,5000
+2,Monolith (Layered),0.064,0.059,0.059,0.074,2000,S,2
+2,Hexagonal (Ports & Adapters),0.064,0.047,0.059,0.072,2000,S,2
+2,Messaging (Channel-based),0.109,0.068,0.105,0.122,2000,S,2
+2,Monolith (Layered),0.102,0.069,0.086,0.145,2000,M,50
+2,Hexagonal (Ports & Adapters),0.125,0.069,0.109,0.177,2000,M,50
+2,Messaging (Channel-based),0.151,0.077,0.142,0.169,2000,M,50
+2,Monolith (Layered),0.325,0.08,0.31,0.422,2000,L,500
+2,Hexagonal (Ports & Adapters),0.293,0.085,0.27,0.46,2000,L,500
+2,Messaging (Channel-based),0.194,0.066,0.187,0.217,2000,L,500
+2,Monolith (Layered),0.748,0.152,0.668,1.043,2000,XL,5000
+2,Hexagonal (Ports & Adapters),0.739,0.149,0.67,1.064,2000,XL,5000
+2,Messaging (Channel-based),0.76,0.158,0.696,1.122,2000,XL,5000
+3,Monolith (Layered),0.07,0.078,0.062,0.08,2000,S,2
+3,Hexagonal (Ports & Adapters),0.081,0.066,0.074,0.1,2000,S,2
+3,Messaging (Channel-based),0.125,0.077,0.119,0.14,2000,S,2
+3,Monolith (Layered),0.114,0.073,0.107,0.131,2000,M,50
+3,Hexagonal (Ports & Adapters),0.125,0.073,0.115,0.148,2000,M,50
+3,Messaging (Channel-based),0.152,0.088,0.14,0.194,2000,M,50
+3,Monolith (Layered),0.319,0.065,0.303,0.374,2000,L,500
+3,Hexagonal (Ports & Adapters),0.277,0.065,0.268,0.314,2000,L,500
+3,Messaging (Channel-based),0.181,0.073,0.178,0.206,2000,L,500
+3,Monolith (Layered),0.766,0.188,0.688,1.138,2000,XL,5000
+3,Hexagonal (Ports & Adapters),0.727,0.142,0.665,1.061,2000,XL,5000
+3,Messaging (Channel-based),0.74,0.152,0.682,1.101,2000,XL,5000
+4,Monolith (Layered),0.066,0.069,0.06,0.075,2000,S,2
+4,Hexagonal (Ports & Adapters),0.069,0.055,0.06,0.099,2000,S,2
+4,Messaging (Channel-based),0.114,0.073,0.106,0.137,2000,S,2
+4,Monolith (Layered),0.109,0.074,0.099,0.132,2000,M,50
+4,Hexagonal (Ports & Adapters),0.124,0.081,0.112,0.184,2000,M,50
+4,Messaging (Channel-based),0.162,0.095,0.146,0.235,2000,M,50
+4,Monolith (Layered),0.334,0.071,0.336,0.383,2000,L,500
+4,Hexagonal (Ports & Adapters),0.284,0.067,0.272,0.319,2000,L,500
+4,Messaging (Channel-based),0.181,0.078,0.168,0.253,2000,L,500
+4,Monolith (Layered),0.78,0.166,0.704,1.102,2000,XL,5000
+4,Hexagonal (Ports & Adapters),0.766,0.178,0.693,1.132,2000,XL,5000
+4,Messaging (Channel-based),0.789,0.16,0.724,1.154,2000,XL,5000
+5,Monolith (Layered),0.07,0.08,0.061,0.081,2000,S,2
+5,Hexagonal (Ports & Adapters),0.083,0.064,0.077,0.097,2000,S,2
+5,Messaging (Channel-based),0.126,0.075,0.12,0.161,2000,S,2
+5,Monolith (Layered),0.109,0.062,0.101,0.123,2000,M,50
+5,Hexagonal (Ports & Adapters),0.115,0.06,0.109,0.127,2000,M,50
+5,Messaging (Channel-based),0.141,0.074,0.134,0.161,2000,M,50
+5,Monolith (Layered),0.295,0.059,0.278,0.339,2000,L,500
+5,Hexagonal (Ports & Adapters),0.259,0.058,0.25,0.29,2000,L,500
+5,Messaging (Channel-based),0.166,0.069,0.147,0.204,2000,L,500
+5,Monolith (Layered),0.744,0.141,0.693,1.048,2000,XL,5000
+5,Hexagonal (Ports & Adapters),0.708,0.116,0.657,0.964,2000,XL,5000
+5,Messaging (Channel-based),0.765,0.16,0.703,1.127,2000,XL,5000

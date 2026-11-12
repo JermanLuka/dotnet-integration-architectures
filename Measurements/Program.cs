@@ -10,7 +10,7 @@ var resultsDir = args.Length > 0
 Directory.CreateDirectory(resultsDir);
 
 var perfRunner = new PerformanceRunner();
-var perfResults = await perfRunner.RunAllAsync(iterations: 500);
+var perfResults = await perfRunner.RunAllAsync(iterations: 2000);
 PerformanceRunner.WriteCsv(perfResults, Path.Combine(resultsDir, "performance.csv"));
 
 var ftRunner = new FaultToleranceRunner();
@@ -19,5 +19,3 @@ FaultToleranceRunner.WriteCsv(ftResults, Path.Combine(resultsDir, "fault-toleran
 
 var ftTransientResults = await ftRunner.RunAllTransientAsync();
 FaultToleranceRunner.WriteTransientCsv(ftTransientResults, Path.Combine(resultsDir, "fault-tolerance-transient.csv"));
-
-SummaryRunner.Run(resultsDir);
